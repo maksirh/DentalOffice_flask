@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-4" style="max-width:640px;">
+  <h3 class="text-center mb-4">Відгуки пацієнтів</h3>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  {% if current_user.is_authenticated %}
+    <form method="POST" class="mb-4">
+      {{ form.hidden_tag() }}
+      <div class="mb-3">
+        {{ form.review(class="form-control", placeholder="Ваш відгук...") }}
+        {% for error in form.review.errors %}
+          <div class="text-danger"><small>{{ error }}</small></div>
+        {% endfor %}
+      </div>
+      <button class="btn btn-primary">Надіслати відгук</button>
+    </form>
+  {% else %}
+    <div class="alert alert-info mb-4">
+      Щоб залишити відгук, <a href="{{ url_for('main.login') }}">увійдіть</a> або
+      <a href="{{ url_for('main.register') }}">зареєструйтесь</a>.
+    </div>
+  {% endif %}
+
+  {% for r in reviews %}
+    <div class="border rounded-3 p-3 mb-3">
+      <div class="d-flex justify-content-between">
+        <strong>{{ r.user.username }}</strong>
+        <small class="text-muted">{{ r.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+      </div>
+      <p class="mt-2 mb-0">
+          {{ r.review.replace('\n', '<br>')|safe }}
+      </p>
+      {% if current_user.is_authenticated and current_user.id == r.user.id %}
+        <div class="mt-2">
+          <a href="{{ url_for('main.review_edit', review_id=r.id) }}" class="btn btn-sm btn-outline-secondary me-2">Редагувати</a>
+          <a href="{{ url_for('main.review_delete', review_id=r.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Видалити відгук?');">Видалити</a>
+        </div>
+      {% endif %}
+    </div>
+  {% else %}
+    <p class="text-center text-muted">Поки що відгуків немає.</p>
+  {% endfor %}
+
+</div>
+{% endblock %}

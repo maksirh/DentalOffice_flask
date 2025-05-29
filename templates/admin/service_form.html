@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4" style="max-width: 600px;">
+  <h3 class="mb-3">{{ service and 'Редагувати послугу' or 'Нова послуга' }}</h3>
+  <form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+      {{ form.name.label }} {{ form.name(class="form-control") }}
+      {% for e in form.name.errors %}<div class="text-danger">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="mb-3">
+      {{ form.description.label }} {{ form.description(class="form-control", rows=4) }}
+      {% for e in form.description.errors %}<div class="text-danger">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="mb-3">
+      {{ form.image.label }} {{ form.image() }}
+      {% if service and service.image %}
+        <div class="mt-2">
+          <img src="{{ url_for('static', filename='uploads/' ~ service.image) }}" style="height:100px;">
+        </div>
+      {% endif %}
+      {% for e in form.image.errors %}<div class="text-danger">{{ e }}</div>{% endfor %}
+    </div>
+    <button class="btn btn-success">{{ service and 'Оновити' or 'Додати' }}</button>
+  </form>
+</div>
+{% endblock %}

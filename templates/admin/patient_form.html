@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Новий пацієнт</h3>
+<form method="POST" enctype="multipart/form-data">
+  {{ form.hidden_tag() }}
+  {% for field in form %}
+    <div class="mb-3">
+      {{ field.label }} {{ field(class="form-control") }}
+      {% for e in field.errors %}<div class="text-danger">{{ e }}</div>{% endfor %}
+    </div>
+  {% endfor %}
+  <button class="btn btn-success">Зберегти</button>
+</form>
+{% endblock %}

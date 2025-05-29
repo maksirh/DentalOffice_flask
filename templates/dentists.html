@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="container my-4">
+  <h2 class="mb-4">Список стоматологів</h2>
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for dentist in dentists %}
+      <div class="col">
+        <div class="card h-100">
+          <img
+            src="{{ url_for('static', filename='images/' ~ dentist.image) }}"
+            class="card-img-top"
+            alt="{{ dentist.name }}"
+          >
+          <div class="card-body">
+            <h5 class="card-title">{{ dentist.name }}</h5>
+            <p class="card-text mb-1">Вік: {{ dentist.age }} років</p>
+            <p class="card-text mb-1">Досвід: {{ dentist.experience }} років</p>
+            <p class="card-text">Телефон: {{ dentist.phoneNumber }}</p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

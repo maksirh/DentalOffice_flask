@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Записи на прийом</h3>
+<table class="table">
+  <thead><tr><th>#</th><th>Ім'я</th><th>Вік</th><th>Телефон</th><th>Причина</th><th>Дата</th></tr></thead>
+  <tbody>
+  {% for a in appointments %}
+    <tr>
+      <td>{{ a.id }}</td>
+      <td>{{ a.name }}</td>
+      <td>{{ a.age }}</td>
+      <td>{{ a.phoneNumber }}</td>
+      <td>{{ a.reason }}</td>
+      <td>{{ a.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

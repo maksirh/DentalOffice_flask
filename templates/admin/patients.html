@@ -1,0 +1,42 @@
+<!-- templates/admin/patients.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <h3 class="mb-3">Пацієнти (адмін)</h3>
+  <div class="mb-3">
+    <a href="{{ url_for('main.admin_new_patient') }}" class="btn btn-primary">Додати пацієнта</a>
+  </div>
+  {% if patients %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Ім'я</th>
+          <th>Вік</th>
+          <th>Телефон</th>
+          <th>Фото</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in patients %}
+        <tr>
+          <td>{{ p.id }}</td>
+          <td>{{ p.name }}</td>
+          <td>{{ p.age }}</td>
+          <td>{{ p.phoneNumber }}</td>
+          <td>
+            {% if p.image %}
+              <img src="{{ url_for('static', filename='uploads/' ~ p.image) }}"
+                   alt="{{ p.name }}" style="height: 50px;">
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="text-muted">Поки що немає жодного пацієнта.</p>
+  {% endif %}
+</div>
+{% endblock %}

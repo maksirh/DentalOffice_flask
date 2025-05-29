@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="container my-4" style="max-width: 500px;">
+  <h3 class="mb-4 text-center">Профіль користувача</h3>
+  <ul class="list-group">
+    <li class="list-group-item"><strong>Username:</strong> {{ current_user.username }}</li>
+    <li class="list-group-item"><strong>Role:</strong> {{ current_user.role }}</li>
+    <li class="list-group-item"><strong>ID:</strong> {{ current_user.id }}</li>
+  </ul>
+</section>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/login.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/auth.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/logout.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/profile.js') }}" defer></script>
+{% endblock %}

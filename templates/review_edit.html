@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4" style="max-width:520px;">
+  <h4 class="mb-3">Редагувати відгук</h4>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+      {{ form.review(class="form-control") }}
+      {% for error in form.review.errors %}
+        <div class="text-danger"><small>{{ error }}</small></div>
+      {% endfor %}
+    </div>
+    <button class="btn btn-success mt-2">Зберегти</button>
+    <a class="btn btn-secondary mt-2" href="{{ url_for('main.reviews') }}">Скасувати</a>
+  </form>
+</div>
+{% endblock %}
