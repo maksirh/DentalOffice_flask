@@ -19,20 +19,32 @@
     {{ form.hidden_tag() }}
 
     {% for field in form %}
-      {% if field.type != 'CSRFTokenField' %}
-        <div class="mb-3">
-          {{ field.label(class="form-label") }}
-          {{ field(class="form-control") }}
-          {% if field.errors %}
-            <div class="text-danger">
-              {% for error in field.errors %}
-                <small>{{ error }}</small><br>
-              {% endfor %}
-            </div>
-          {% endif %}
+  {% if field.type != 'CSRFTokenField' %}
+    <div class="mb-3">
+      {{ field.label(class="form-label") }}
+
+      {# Якщо це список стоматологів #}
+      {% if field.type == 'SelectField' %}
+        {{ field(class="form-select") }}
+
+      {# Якщо це текстова область #}
+      {% elif field.type == 'TextAreaField' %}
+        {{ field(class="form-control", rows=3) }}
+
+      {% else %}
+        {{ field(class="form-control") }}
+      {% endif %}
+
+      {% if field.errors %}
+        <div class="text-danger">
+          {% for error in field.errors %}
+            <small>{{ error }}</small><br>
+          {% endfor %}
         </div>
       {% endif %}
-    {% endfor %}
+    </div>
+  {% endif %}
+{% endfor %}
 
     <button type="submit" class="btn btn-success w-100">Надіслати</button>
   </form>

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, TextAreaField, PasswordField, SubmitField, FileField
+from wtforms import StringField, IntegerField, TextAreaField, PasswordField, SubmitField, FileField, SelectField
 from wtforms.validators import DataRequired, Length, NumberRange, Optional, EqualTo, Email
 from flask_wtf.file import FileAllowed
 
@@ -17,11 +17,14 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Увійти')
 
 class AppointmentForm(FlaskForm):
-    name = StringField('Ім’я', validators=[DataRequired(), Length(max=100)])
-    age = IntegerField('Вік', validators=[DataRequired(), NumberRange(min=0, max=150)])
-    phoneNumber = StringField('Телефон', validators=[DataRequired(), Length(max=20)])
-    reason = TextAreaField('Причина візиту', validators=[DataRequired(), Length(max=500)])
-    submit = SubmitField('Надіслати')
+    name = StringField('Ім’я', validators=[DataRequired()])
+    age = IntegerField('Вік', validators=[DataRequired()])
+    phoneNumber = StringField('Телефон', validators=[DataRequired()])
+    reason = TextAreaField('Причина запису', validators=[DataRequired()])
+    dentist = SelectField('Стоматолог', coerce=int, validators=[DataRequired()])
+    email = StringField('E-mail', validators=[DataRequired(), Email()])
+    submit = SubmitField('Записатися')
+
 
 class ReviewForm(FlaskForm):
     review = TextAreaField('Ваш відгук', validators=[DataRequired(), Length(max=1000)])

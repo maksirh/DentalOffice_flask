@@ -38,6 +38,14 @@ class Dentist(db.Model):
     phoneNumber = db.Column(db.String(20), nullable=False)
     image = db.Column(db.String(200))
 
+    appointments = db.relationship(
+        'Appointment',
+        back_populates='dentist',
+        cascade='all, delete-orphan',
+        lazy='dynamic'
+    )
+
+
 class Patient(db.Model):
     __tablename__ = 'patients'
     id = db.Column(db.Integer, primary_key=True)
@@ -55,6 +63,16 @@ class Appointment(db.Model):
     phoneNumber = db.Column(db.String(20), nullable=False)
     reason = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    dentist_id = db.Column(
+        db.Integer,
+        db.ForeignKey('dentists.id', ondelete='CASCADE'),
+        nullable=False
+    )
+    dentist = db.relationship(
+        'Dentist',
+        back_populates='appointments'
+    )
 
 class Review(db.Model):
     __tablename__ = 'reviews'

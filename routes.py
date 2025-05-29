@@ -189,28 +189,45 @@ def confirm_email(token):
 @bp.route('/appointment', methods=['GET', 'POST'])
 def appointment():
     form = AppointmentForm()
+
+    form.dentist.choices = [
+        (d.id, f"{d.name} (досвід {d.experience} р.)")
+        for d in Dentist.query.order_by(Dentist.name).all()
+    ]
+
     if form.validate_on_submit():
         appt = Appointment(
             user_id=current_user.get_id() if current_user.is_authenticated else None,
             name=form.name.data,
             age=form.age.data,
             phoneNumber=form.phoneNumber.data,
-            reason=form.reason.data
+            reason=form.reason.data,
+            dentist_id=form.dentist.data
         )
         db.session.add(appt)
         db.session.commit()
 
+        recipient = current_user.email if current_user.is_authenticated else form.email.data
+        dentist = Dentist.query.get(form.dentist.data)
+
         msg = Message(
             subject='Ваш запис підтверджено',
-            recipients=[form.email.data]  # або current_user.email
+            recipients=[recipient]
         )
-        msg.body = f"Ви записані на {appt.date_time}"
+        msg.body = (
+            f"Вітаємо, {appt.name}!\n\n"
+            f"Ви успішно записані на прийом до стоматолога {dentist.name} "
+            f"({dentist.experience} років досвіду).\n\n"
+            f"Дякуємо, що обрали наш сервіс!"
+        )
         mail = current_app.extensions['mail']
         mail.send(msg)
 
-        flash('Запис створено успішно!', 'success')
+        flash('Ваш запис створено, лист-підтвердження відправлено.', 'success')
         return redirect(url_for('main.home'))
+
     return render_template('appointment.html', form=form)
+
 
 
 @bp.route('/dentists')
